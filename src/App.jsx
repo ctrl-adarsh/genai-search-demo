@@ -49,19 +49,23 @@ export default function App() {
       return;
     }
     setIsTyping(true);
+    // inside your useEffect in App.jsx
     const timer = setTimeout(async () => {
       setIsTyping(false);
       setApiCalls((p) => p + 1);
+
       try {
         const res = await fetch("/api/search", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ query }),
         });
+
+        // Even if the server has a 500 error, we handle the JSON response
         const data = await res.json();
-        setResult(data.text || data.error);
-      } catch {
-        setResult(">> PROTOCOL_ERROR");
+        setResult(data.text || data.error || ">> NO_DATA_RETURNED");
+      } catch (err) {
+        setResult(">> NETWORK_TIMEOUT: CHECK_UPLINK_STATUS");
       }
     }, 800);
     return () => clearTimeout(timer);
