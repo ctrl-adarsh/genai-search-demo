@@ -1,0 +1,5 @@
+# Find the deployment ID/URL first
+vercel ls
+
+# Remove that specific one
+vercel rm genai-search-protocol-xyz123.vercel.app
